@@ -112,8 +112,9 @@ mongoose.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/calendar",
+    //callbackURL: "http://localhost:3000/auth/google/calendar",
     //userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+    callbackURL: "https://calendar-2-hasan1207.onrender.com/auth/google/calendar"
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log(profile);
@@ -127,7 +128,8 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: "http://localhost:3000/auth/facebook/calendar"
+  //callbackURL: "http://localhost:3000/auth/facebook/calendar"
+  callbackURL: "https://calendar-2-hasan1207.onrender.com/auth/facebook/calendar"
 },
 function(accessToken, refreshToken, profile, cb) {
   console.log(profile);
