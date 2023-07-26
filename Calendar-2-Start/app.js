@@ -437,8 +437,8 @@ app.post("/login", (req, res, next) => {
 
 app.get("/logout", (req, res) => {
 
-  req.session.destroy();
-  
+  //req.session.destroy();
+
   const dObj = new Date();
   let yr = dObj.getFullYear();
   let mon = dObj.getMonth();
