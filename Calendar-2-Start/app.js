@@ -176,30 +176,6 @@ function(accessToken, refreshToken, profile, cb) {
 
   });
 
-  app.get("/submit", (req, res) => {
-    if (req.isAuthenticated()) {
-      res.sendFile(__dirname + "/submit.html");
-    } else {
-      res.redirect(__dirname + "/login.html");
-    }
-  });
-
-  app.post("/submit", (req, res) => {
-    const submittedSecret = req.body.secret;
-    console.log(req.user.id);
-
-    User.findById(req.user.id).then(foundUser => {
-      if(foundUser){
-        foundUser.secret = submittedSecret;
-        foundUser.save().then(() => {
-          //res.redirect("/calendar");
-          res.sendFile(__dirname + "/calendar.html");
-        });
-      }
-    }).catch(err => {
-      console.log(err);
-    });
-  });
 
   app.post("/calendar", (req, res) => {
 
