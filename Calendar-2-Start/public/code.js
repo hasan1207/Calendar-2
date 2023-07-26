@@ -3,7 +3,6 @@ var currMonth;
 
 var currYearNumber;
 var currMonthNumber;
-let dateHidden = true;
 
 const date = new Date();
 const options = {
@@ -354,10 +353,6 @@ window.addEventListener('DOMContentLoaded', function () {
     
     
         dayElement.addEventListener('click', function(){
-          if(dateHidden){
-            document.querySelector('#dispDatediv').classList.remove('hidden');
-            dateHidden = false;
-          }
           var d = new Date(currYear + "-" + currMonth + "-" + this.textContent);
     
           const options = {
