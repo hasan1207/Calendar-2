@@ -3,51 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar Application</title>
+    <title>Calendar</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Poppins:wght@100&display=swap" rel="stylesheet">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="/css/style.css">
-    <!-- <link rel="stylesheet" href="styles.css"> -->
 
     
 </head>
 <body>
 
     <h1>Calendar</h1>
-    <!-- <div id="loading-overlay"></div> -->
     
     <div class="selection">
 
-        <!-- <form action="/action_page.php">
-            <label for="bdaymonth">Birthday (month and year):</label>
-            <input type="month" id="bdaymonth" name="bdaymonth">
-            <input type="submit">
-          </form> -->
 
           
             <label for="bdaymonth">Select month and year:</label>
             <input type="month" id="bdaymonth" name="bdaymonth" class="dateEntered ">
             
-            <!-- <input type="submit"> -->
             <div><button id="submit">Show Calendar</button></div>
             <div><a href="/logout"><button id="logout" >Logout</button></a></div>
             
           
             <div id="spacer" style="width: 200px; height: 70px; margin-right:0px;" class="invisibl"></div>
 
-          <!-- <form action="/action_page.php">
-            <label for="cars">Choose a car:</label>
-            <select name="cars" id="cars">
-              <option value="volvo">Volvo</option>
-              <option value="saab">Saab</option>
-              <option value="opel">Opel</option>
-              <option value="audi">Audi</option>
-            </select>
-            <br><br>
-            <input type="submit" value="Submit">
-          </form> -->
           
     </div>
 
@@ -59,7 +39,6 @@
     <div id="popup" class="hidden">
       <form action="/calendar" method="post">
         <input type="hidden" name="dateData" id="dData">
-        <!-- <input type="hidden" name="dateDataPost" id="dateDataP" value=""> -->
         <input type="text" name="eventTitle" placeholder="Event Title" autocomplete="off">
         <textarea name="eventDescription" placeholder="Event Description"></textarea>
         <input type="hidden" name="action" id="action">
@@ -73,41 +52,19 @@
 
     <div id="tooltipWrapper" class="hidden">
     <div id="tooltip" --class="hidden">
-      <!-- <div id="tooltipContent"> -->
       <h3 id="tooltipTitle"></h3>
       <p id="tooltipContent"></p>
-    <!-- </div> -->
     </div>
   </div>
 
 
 
-
-
-    <!-- <div class="btm"><p id="dispDate"></p></div> -->
     <div id="calendar">
-      <!-- <button id="prev">Previous Month</button>
-      <button id="next">Next Month</button> -->
 
       <button id="prev" class="--btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="32" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
       </svg></button>
       
-
-
-        <!-- <div class="jan mon"><h1>January</h1><div class="days"></div></div>
-        <div class="feb mon"><h1>February</h1><div class="days"></div></div>
-        <div class="mar mon"><h1>March</h1><div class="days"></div></div>
-        <div class="apr mon"><h1>April</h1><div class="days"></div></div>
-        <div class="may mon"><h1>May</h1><div class="days"></div></div>
-        <div class="jun mon"><h1>June</h1><div class="days"></div></div>
-        <div class="jul mon"><h1>July</h1><div class="days"></div></div>
-        <div class="aug mon"><h1>August</h1><div class="days"></div></div>
-        <div class="sep mon"><h1>September</h1><div class="days"></div></div>
-        <div class="oct mon"><h1>October</h1><div class="days"></div></div>
-        <div class="nov mon"><h1>November</h1><div class="days"></div></div>
-        <div class="dec mon"><h1>December</h1><div class="days"></div></div> -->
-
 
         <div class="jan mon"><h1>January</h1></div>
         <div class="feb mon"><h1>February</h1></div>
@@ -131,10 +88,7 @@
         
         
     </div>
-    <!-- <p id="dispDate"></p> -->
     <div class="btm hidden" id="dispDatediv"><p id="dispDate"></p></div>
-    <!-- <script src="./code.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script> -->
     <script src="/code.js"></script>
 </body>
 </html>
