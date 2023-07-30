@@ -21,7 +21,9 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const findOrCreate = require('mongoose-findorcreate');
 const { compareSync } = require('bcrypt');
 let alert = require('alert'); 
-
+// const vonage = require('@vonage/server-sdk');
+const { Vonage } = require('@vonage/server-sdk');
+const nodemailer = require('nodemailer');
 
 const app = express();
 
@@ -112,12 +114,16 @@ mongoose.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "https://calendar-2-hasan1207.onrender.com/auth/google/calendar",
+    callbackURL: "http://localhost:3000/auth/google/calendar",
     //userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+    //calendar-2-hasan1207.onrender.com
+    //https://localhost:3000/auth/google/calendar
+    // scope: ['profile', 'email'],
   },
   function(accessToken, refreshToken, profile, cb) {
+    //console.log(profile.emails);
     console.log(profile);
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    User.findOrCreate({ googleId: profile.id, username: profile.emails[0].value }, function (err, user) {
       return cb(err, user);
     });
   }
@@ -127,7 +133,8 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: "https://calendar-2-hasan1207.onrender.com/auth/facebook/calendar"
+  callbackURL: "http://localhost:3000/auth/facebook/calendar"
+  //http://localhost:3000/auth/facebook/calendar
 },
 function(accessToken, refreshToken, profile, cb) {
   console.log(profile);
@@ -318,7 +325,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/auth/google", (req, res) => {
-  passport.authenticate("google", { scope: ["profile"] })(req, res);
+  passport.authenticate("google", { scope: ["profile", "email"] })(req, res);
 });
 
 app.get("/auth/google/calendar", 
@@ -334,7 +341,9 @@ app.get("/auth/google/calendar",
 
 
 
-  app.get("/auth/facebook", passport.authenticate("facebook"));
+  //app.get("/auth/facebook", passport.authenticate("facebook"));
+  app.get("/auth/facebook", passport.authenticate("facebook", { scope: ['email'] }));
+  
 
   app.get("/auth/facebook/calendar", 
     passport.authenticate("facebook", { failureRedirect: "/login" }),
@@ -476,10 +485,140 @@ app.get("/calendar/events/:year", (req, res) => {
 });
 
 
+// const vonage = new Vonage({
+//   apiKey: process.env.VONAGE_API_KEY,
+//   apiSecret: process.env.VONAGE_API_SECRET
+// });
 
+// vonage.verify.start({
+//   number: "919952665455",
+//   brand: "Vonage"
+// })
+//   .then(resp => console.log("request_id: " + resp.request_id))
+//   .catch(err => console.error(err));
+
+const from = "Vonage APIs";
+const to = "1234567891";
+//const text = 
+
+// async function sendSMS() {
+//     await vonage.sms.send({to, from, text})
+//         .then(resp => { console.log('Message sent successfully'); console.log(resp); })
+//         .catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
+// }
+
+// sendSMS();
+
+
+// async function sendSMS() {
+//   try {
+//       const response = await vonage.sms.send({ to, from, text });
+//       console.log('Message sent successfully');
+//       console.log(response);
+//   } catch (error) {
+//       console.error('There was an error sending the message.');
+//       console.error(error);
+//   }
+// }
+
+// sendSMS();
+
+// vonage.verify.cancel('6b93074c1d96464f9e1444bd54d98494')
+//   .then(resp => console.log(resp))
+//   .catch(err => console.error(err));
+
+// vonage.verify.check('6b93074c1d96464f9e1444bd54d98494', '3960')
+//   .then(resp => console.log(resp))
+//   .catch(err => console.error(err));
+
+const transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: 'hasan07122002@gmail.com',
+    pass: process.env.GMAIL_PASSWORD
+  }
+});
+
+
+
+
+const currentTime = new Date();
+const millisecondsTo12 = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate() + 1, 0, 0, 0) - currentTime;
+//const millisecondsTo12 = 10000;
+
+function myScheduledFunction() {
+  // Your code to be executed at midnight goes here
+  console.log("Executing daily task at midnight...");
+  // ...
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  
+  const currentDate = `${year}-${month}-${day}`;
+
+  const userCursor = User.find().cursor();
+
+  userCursor.eachAsync(user => {
+    if (user && user.username) {
+      console.log(user.username);
+      // Do whatever processing you need with the username
+
+      //const match = user.events.find()
+
+      const match = user.events.find((obj) => {
+        return (obj.date === currentDate)
+      });
+
+      if(match){
+        const toAddress = user.username;
+
+        const mailOptions = {
+          from: 'hasan07122002@gmail.com', // Sender email address
+          to: toAddress, // Recipient email address
+          subject: "Personal Calendar Event - " + match.title, // Email subject
+          text: match.content // Email body (plaintext)
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error('Error sending email:', error);
+          } else {
+            console.log('Email sent:', info.response);
+          }
+        });
+
+      }
+
+
+    }
+  })
+    .then(() => {
+      console.log('Cursor processing completed.');
+    })
+    .catch(err => {
+      console.error('Error processing cursor:', err);
+    });
+
+  
+  
+
+
+  
+}
+
+
+setTimeout(() => {
+  myScheduledFunction();
+  // Repeat the function every 24 hours
+  setInterval(myScheduledFunction, 24 * 60 * 60 * 1000);
+}, millisecondsTo12);
 
 
 
 app.listen(process.env.PORT || 3000, function() {
     console.log("Server started on port 3000");
   });
+
+
+
